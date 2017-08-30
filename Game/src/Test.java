@@ -6,8 +6,13 @@ public class Test {
     public static void main(String[] args) throws IOException, InterruptedException{
     	State state=new State();
     	int number=0;
-    	Thread daychange=new Thread(new DayChanger(state),"DayChanger");
-    	Thread weatherchange=new Thread(new WeatherChanger(state), "WeatherChanger");
+    	
+    	DayChanger dayChanger = new DayChanger(state);
+    	WeatherChanger weatherChanger = new WeatherChanger(state);
+    	
+    	Thread daychange=new Thread(dayChanger,"DayChanger");
+		Thread weatherchange=new Thread(weatherChanger, "WeatherChanger");
+		
     	Dracura dracura=new Dracura(state);
     	Player player=new Player(state);
     	
@@ -15,6 +20,7 @@ public class Test {
     	
     	daychange.start();
     	weatherchange.start();
+    	
     	
     	System.out.println("공방 게임을 시작합니다.");
     	System.out.println("적인 드라큐라는 낮밤상태에 따라 데미지가 다릅니다.");
@@ -33,10 +39,13 @@ public class Test {
     			case 2://방
     				match.DracuraAttack();
     				break;
+    			case 3://종료
+    				number=3;
+    				break;
     			default: break;
     			
     		}
-    	}while(number!=0 && match.whoisDie()==1);
+    	}while(number!=3 && match.whoisDie()==1);
     	
     	switch(match.whoisDie()){
     	case 2:
@@ -48,8 +57,8 @@ public class Test {
     	default:
     		break;
     	}
+    	weatherChanger.finish();
     	System.out.println("End of Main");
-    	
     }
     public static int getNumber() throws IOException, NumberFormatException{
 		int inputNumber=0;

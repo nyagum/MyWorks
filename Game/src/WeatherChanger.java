@@ -5,6 +5,8 @@ class WeatherChanger implements Runnable{
 	public WeatherChanger(State state){
 		this.state=state;
 	}
+	private boolean flag=true;
+	
 	public void WeatherChange(){
 		Random random=new Random(System.currentTimeMillis());
 		int randomNumber=random.nextInt(3);
@@ -18,7 +20,7 @@ class WeatherChanger implements Runnable{
 	}
 	@Override
 	public void run(){
-		while(!Thread.interrupted()){
+		while(flag){
 			//System.out.println("\t\t"+Thread.currentThread().getName()+" before :" +state.getWeather().toString());
     		WeatherChange();
     		try {
@@ -26,7 +28,10 @@ class WeatherChanger implements Runnable{
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}
-    		//System.out.println("\t\t"+Thread.currentThread().getName()+" after :"+state.getWeather().toString());
+    		System.out.println("\t\t"+Thread.currentThread().getName()+" after :"+state.getWeather().toString());
 		}
+	}
+	public void finish() {
+		flag=false;
 	}
 }
